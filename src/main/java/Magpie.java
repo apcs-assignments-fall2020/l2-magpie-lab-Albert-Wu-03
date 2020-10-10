@@ -31,31 +31,67 @@ public class Magpie
     public String getResponse(String statement)
     {
         String response = "";
+        String str = statement.trim();
         if (statement.indexOf("no") >= 0)
         {
             response = "Why so negative?";
         }
-        else if (statement.indexOf("mother") >= 0
-                || statement.indexOf("father") >= 0
-                || statement.indexOf("sister") >= 0
-                || statement.indexOf("brother") >= 0)
+        else if (findWord(statement, "mother") >= 0
+                || findWord(statement,"father") >= 0
+                || findWord(statement,"sister") >= 0
+                || findWord(statement,"brother") >= 0)
         {
             response = "Tell me more about your family.";
         }
-        else
+        else if (findWord(statement,"dog") >= 0
+                ||findWord(statement,"cat") >= 0)
         {
+            response = "Tell me more about your pets";           
+        }
+        else if(findWord(statement,"Mr.") >= 0)
+        {
+            response = "He sounds like a good teacher";
+        }
+        else if(findWord(statement,"Ms.") >= 0
+                ||findWord(statement,"Mrs.") >= 0)
+        {
+            response = "She sounds like a good teacher";
+        }
+        else if(str.length()==0){
+            response = "Say something, please.";
+        }
+        else if (findWord(statement,"meet") >= 0
+                ||findWord(statement,"vegetable") >= 0)
+        {
+            response = "What is your favorite food?";           
+        }
+        else if (findWord(statement,"Apple") >= 0
+                ||findWord(statement,"Samsung") >= 0)
+        {
+            response = "What phone are you using?";           
+        }
+        else if (findWord(statement,"soccer") >= 0
+                ||findWord(statement,"basketball") >= 0
+                ||findWord(statement,"baseball") >= 0)
+        {
+            response = "What is your favorite sport?";           
+        }
+        else if (findWord(statement,"I want") >= 0)
+        {
+            response = transformIWantStatement(statement);           
+        }
+        else{
             response = getRandomResponse();
         }
         return response;
     }
-    
     /**
      * Pick a default response to use if nothing else fits.
      * @return a non-committal string
      */
     public String getRandomResponse()
     {
-        final int NUMBER_OF_RESPONSES = 4;
+        final int NUMBER_OF_RESPONSES = 6;
         double r = Math.random();
         int whichResponse = (int)(r * NUMBER_OF_RESPONSES);
         String response = "";
@@ -76,7 +112,14 @@ public class Magpie
         {
             response = "You don't say.";
         }
-    
+        else if (whichResponse == 4)
+        {
+            response = "Nice!";
+        }
+        else if (whichResponse == 5)
+        {
+            response = "I am sorry about that.";
+        }
         return response;
     }
 
@@ -90,7 +133,27 @@ public class Magpie
     // The method returns the index of the first character in word
     // if it is found, and returns -1 otherwise. 
     public int findWord(String str, String word) {
+        String str1 = str.toLowerCase();
+        str1 = str1 +" ";
+        String word1 = word.toLowerCase();
+        int idx = str1.indexOf(word);
+        int i = idx;
+        if(idx>=1){
+            if(str1.charAt(idx-1)==' ' && str1.charAt(idx+word1.length())==' ') {
+        	return i;
+        }else{
+        	return -1;
+            }       
+        }
+        if(idx==0){
+            if(str1.charAt(idx+word1.length())==' ') {
+        	return i;
+        }else{
+        	return -1;
+            }       
+        }
         return -1;
+        
     }
 
     
@@ -104,8 +167,9 @@ public class Magpie
      */
     public String transformIWantStatement(String statement)
     {
-        //your code here
-        return "";
+        String str = statement.substring(7, statement.length());
+        statement = "Would you really be happy if you had " + str+"?";
+        return statement;
     }
 
     /**
@@ -116,8 +180,11 @@ public class Magpie
      */
     public String transformIYouStatement(String statement)
     {
-        //your code here
-        return "";
+        int idx = statement.indexOf("you");
+		String str = statement.substring(2, idx-1);
+		statement = "Why do you " + str + " me?";
+		System.out.println(statement);
+        return statement;
     }
 
     /**
@@ -128,8 +195,9 @@ public class Magpie
      */
     public String transformIWantToStatement(String statement)
     {
-        // your code here
-        return "";
+        String str = statement.substring(10, statement.length());
+        statement = "What would it mean to " + str+"?";
+        return statement;
     }
 
 
@@ -143,7 +211,10 @@ public class Magpie
      */
     public String transformYouMeStatement(String statement)
     {
-        // your code here
-        return "";
+        int idx = statement.indexOf("me");
+		String str = statement.substring(7, idx-1);
+		statement = "What makes you think that I " + str + " you?";
+		System.out.println(statement);
+        return statement;
     }
 }
